@@ -1,2 +1,2 @@
 # yujeong123.github.io
-검사기
+ https://yujeong0729.github.io/yujeong123.github.io/
