@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - 설문 결과 확인</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D1B4E;
+            --secondary: #E8B4F9;
+            --accent: #FFD93D;
+            --background: #FAF7F2;
+            --text: #1A1A1A;
+            --card-bg: #FFFFFF;
+            --shadow: rgba(45, 27, 78, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(45, 27, 78, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .filters {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid #E0E0E0;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .results-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #E0E0E0;
+        }
+
+        .results-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .refresh-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--secondary);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .result-item {
+            background: linear-gradient(135deg, rgba(232, 180, 249, 0.05), rgba(255, 217, 61, 0.05));
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .result-item:hover {
+            border-color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-test-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .result-icon {
+            font-size: 2rem;
+        }
+
+        .result-test-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .result-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .result-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .result-body {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .result-title-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .result-title-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .result-desc {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .export-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 217, 61, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .result-body {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← 메인으로 돌아가기</a>
+
+        <div class="header">
+            <h1>📊 관리자 대시보드</h1>
+            <p>사용자들의 심리 테스트 결과를 확인하세요</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-number" id="totalCount">-</div>
+                <div class="stat-label">전체 응답 수</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎓</div>
+                <div class="stat-number" id="universityCount">-</div>
+                <div class="stat-label">대학찾기 테스트</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🧠</div>
+                <div class="stat-number" id="psychologyCount">-</div>
+                <div class="stat-label">심리 테스트</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🍀</div>
+                <div class="stat-number" id="fortuneCount">-</div>
+                <div class="stat-label">행운 지수 테스트</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <span class="filter-label">필터:</span>
+            <button class="filter-btn active" onclick="filterResults('all')">전체</button>
+            <button class="filter-btn" onclick="filterResults('university')">대학찾기</button>
+            <button class="filter-btn" onclick="filterResults('psychology')">심리테스트</button>
+            <button class="filter-btn" onclick="filterResults('fortune')">행운지수</button>
+        </div>
+
+        <div class="results-container">
+            <div class="results-header">
+                <h2>테스트 결과 목록</h2>
+                <div>
+                    <button class="export-btn" onclick="exportToCSV()">📥 CSV 다운로드</button>
+                    <button class="refresh-btn" onclick="loadResults()">🔄 새로고침</button>
+                </div>
+            </div>
+            <div id="resultsContainer">
+                <div class="loading">데이터를 불러오는 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
+            authDomain: "psychology-test-login.firebaseapp.com",
+            projectId: "psychology-test-login",
+            storageBucket: "psychology-test-login.firebasestorage.app",
+            messagingSenderId: "683840388122",
+            appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let allResults = [];
+        let currentFilter = 'all';
+
+        // 결과 불러오기
+        window.loadResults = async function() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '<div class="loading">데이터를 불러오는 중...</div>';
+
+            try {
+                const q = query(collection(db, 'testResults'), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allResults = [];
+                querySnapshot.forEach((doc) => {
+                    allResults.push({ id: doc.id, ...doc.data() });
+                });
+
+                updateStats();
+                displayResults();
+            } catch (error) {
+                console.error('데이터 로드 실패:', error);
+                container.innerHTML = '<div class="no-results">데이터를 불러오는데 실패했습니다. 😢<br>콘솔을 확인해주세요.</div>';
+            }
+        };
+
+        // 통계 업데이트
+        function updateStats() {
+            const total = allResults.length;
+            const university = allResults.filter(r => r.testType === 'university').length;
+            const psychology = allResults.filter(r => r.testType === 'psychology').length;
+            const fortune = allResults.filter(r => r.testType === 'fortune').length;
+
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('universityCount').textContent = university;
+            document.getElementById('psychologyCount').textContent = psychology;
+            document.getElementById('fortuneCount').textContent = fortune;
+        }
+
+        // 결과 표시
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            
+            const filtered = currentFilter === 'all' 
+                ? allResults 
+                : allResults.filter(r => r.testType === currentFilter);
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="no-results">결과가 없습니다. 🤔</div>';
+                return;
+            }
+
+            container.innerHTML = filtered.map(result => {
+                const date = result.createdAt ? new Date(result.createdAt).toLocaleString('ko-KR') : '날짜 정보 없음';
+                
+                return `
+                    <div class="result-item">
+                        <div class="result-header">
+                            <div class="result-test-info">
+                                <div class="result-icon">${result.resultIcon || '📝'}</div>
+                                <div>
+                                    <div class="result-test-name">${result.testName || '테스트'}</div>
+                                    <div class="result-date">${date}</div>
+                                </div>
+                            </div>
+                            <div class="result-user">
+                                ${result.userEmail === '익명' ? '👤' : '✉️'} ${result.userEmail || '익명'}
+                            </div>
+                        </div>
+                        <div class="result-body">
+                            <div class="result-title-box">
+                                <div class="result-title-icon">${result.resultIcon || '📝'}</div>
+                                <div class="result-title">${result.resultTitle || '결과 없음'}</div>
+                            </div>
+                            <div class="result-desc">
+                                ${result.resultDesc || '설명 없음'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 필터링
+        window.filterResults = function(filter) {
+            currentFilter = filter;
+            
+            // 버튼 활성화 상태 변경
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displayResults();
+        };
+
+        // CSV 다운로드
+        window.exportToCSV = function() {
+            if (allResults.length === 0) {
+                alert('다운로드할 데이터가 없습니다.');
+                return;
+            }
+
+            const filtered = currentFilter === 'all' 
+                ? allResults 
+                : allResults.filter(r => r.testType === currentFilter);
+
+            // CSV 헤더
+            let csv = '날짜,테스트종류,사용자이메일,결과제목,결과설명\n';
+            
+            // CSV 데이터
+            filtered.forEach(result => {
+                const date = result.createdAt ? new Date(result.createdAt).toLocaleString('ko-KR') : '날짜 정보 없음';
+                const testName = result.testName || '테스트';
+                const email = result.userEmail || '익명';
+                const title = result.resultTitle || '결과 없음';
+                const desc = (result.resultDesc || '설명 없음').replace(/\n/g, ' ').replace(/,/g, '，');
+                
+                csv += `"${date}","${testName}","${email}","${title}","${desc}"\n`;
+            });
+
+            // 다운로드
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `심리테스트_결과_${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // 페이지 로드 시 자동 실행
+        window.addEventListener('load', () => {
+            loadResults();
+        });
+    </script>
+</body>
+</html>
