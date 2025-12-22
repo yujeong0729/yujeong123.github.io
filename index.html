@@ -936,5 +936,21 @@
             document.getElementById('mainScreen').classList.add('active');
         }
     </script>
+ <script type="module">
+    // 여기에 Firebase 초기화 코드 넣기
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
+      authDomain: "psychology-test-login.firebaseapp.com",
+      projectId: "psychology-test-login",
+      storageBucket: "psychology-test-login.firebasestorage.app",
+      messagingSenderId: "683840388122",
+      appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 </body>
 </html>
