@@ -936,6 +936,8 @@
             document.getElementById('resultScreen').classList.remove('active');
             document.getElementById('mainScreen').classList.add('active');
         }
+
+        
     </script>
  <script type="module">
     // 여기에 Firebase 초기화 코드 넣기
@@ -953,5 +955,25 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+<script type="module">
+    import { initializeApp } from "...";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "...";
+
+    const firebaseConfig = { ... };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    window.handleGoogleLogin = async function() {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            isLoggedIn = true;
+            userEmail = user.email;
+            showMainScreen();
+        } catch (error) {
+            alert('로그인 실패: ' + error.message);
+        }
+    };     
 </body>
 </html>
