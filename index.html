@@ -1,1 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>심리 테스트</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        h1 { color: #667eea; text-align: center; margin-bottom: 30px; }
+        h2 { color: #333; margin-bottom: 20px; }
+        .login-screen { text-align: center; }
+        .google-btn {
+            background: #4285f4; color: white; border: none;
+            padding: 15px 30px; border-radius: 10px;
+            cursor: pointer; margin: 20px 0;
+        }
+        .skip-btn {
+            background: transparent; color: #667eea;
+            border: 2px solid #667eea;
+            padding: 12px 25px; border-radius: 10px;
+            cursor: pointer;
+        }
+        .warning-text { color: #999; font-size: 14px; margin-top: 15px; }
+        .test-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .category-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .hidden { display: none; }
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .option {
+            border: 2px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .progress {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            background: #667eea;
+            height: 100%;
+            width: 0%;
+        }
+        .result-content {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            white-space: pre-line;
+        }
+        .back-btn {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div id="loginScreen" class="login-screen">
+        <h1>🧠 심리 테스트</h1>
+        <button class="google-btn" onclick="loginWithGoogle()">Google로 로그인</button>
+        <br>
+        <button class="skip-btn" onclick="skipLogin()">로그인 건너뛰기</button>
+        <p class="warning-text">로그인하지 않으면 결과를 이메일로 받을 수 없습니다.</p>
+    </div>
+
+    <div id="categoryScreen" class="hidden">
+        <h1>테스트 선택</h1>
+        <div class="test-categories">
+            <div class="category-card" onclick="selectTest('personality')">💭 성격 테스트</div>
+            <div class="category-card" onclick="selectTest('fortune')">🍀 오늘의 행운</div>
+        </div>
+    </div>
+
+    <div id="testScreen" class="hidden">
+        <button class="back-btn" onclick="backToCategories()">← 돌아가기</button>
+        <h2 id="testTitle"></h2>
+        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <div id="questionContainer"></div>
+        <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>다음</button>
+    </div>
+
+    <div id="resultScreen" class="hidden">
+        <h2>결과</h2>
+        <div id="resultContent" class="result-content"></div>
+        <button class="btn" onclick="backToCategories()">다시 하기</button>
+    </div>
+
+</div>
+
+<script>
+let isLoggedIn = false;
+let currentTest = '';
+let currentQuestion = 0;
+let answers = [];
+let questions = [];
+
+const tests = {
+    personality: {
+        title: '성격 테스트',
+        questions: [
+            { q: '새로운 사람을 만나는 것이 좋다', options: ['매우 그렇다', '그렇다', '아니다', '전혀 아니다'] },
+            { q: '혼자 있는 시간이 필요하다', options: ['매우 그렇다', '그렇다', '아니다', '전혀 아니다'] }
+        ]
+    },
+    fortune: {
+        title: '오늘의 행운',
+        questions: [
+            { q: '오늘 기분은?', options: ['아주 좋음', '좋음', '보통', '안 좋음'] },
+            { q: '오늘 기대되는 일은?', options: ['많다', '있다', '별로', '없다'] }
+        ]
+    }
+};
+
+function loginWithGoogle() {
+    isLoggedIn = true;
+    showCategoryScreen();
+}
+
+function skipLogin() {
+    showCategoryScreen();
+}
+
+function showCategoryScreen() {
+    loginScreen.classList.add('hidden');
+    categoryScreen.classList.remove('hidden');
+}
+
+function selectTest(type) {
+    currentTest = type;
+    questions = tests[type].questions;
+    currentQuestion = 0;
+    answers = [];
+    categoryScreen.classList.add('hidden');
+    testScreen.classList.remove('hidden');
+    testTitle.textContent = tests[type].title;
+    showQuestion();
+}
+
+function showQuestion() {
+    const q = questions[currentQuestion];
+    questionContainer.innerHTML = `
+        <div class="question">
+            <h3>${q.q}</h3>
+            ${q.options.map((o,i)=>`<div class="option" onclick="selectOption(${i})">${o}</div>`).join('')}
+        </div>`;
+    progressBar.style.width = ((currentQuestion+1)/questions.length*100)+'%';
+    nextBtn.disabled = true;
+}
+
+function selectOption(i) {
+    document.querySelectorAll('.option').forEach((el,idx)=>{
+        el.classList.toggle('selected', idx===i);
+    });
+    answers[currentQuestion] = i;
+    nextBtn.disabled = false;
+}
+
+function nextQuestion() {
+    if (currentQuestion < questions.length-1) {
+        currentQuestion++;
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    testScreen.classList.add('hidden');
+    resultScreen.classList.remove('hidden');
+    const score = answers.reduce((a,b)=>a+b,0);
+    resultContent.textContent = `총 점수: ${score}`;
+}
+
+function backToCategories() {
+    resultScreen.classList.add('hidden');
+    testScreen.classList.add('hidden');
+    categoryScreen.classList.remove('hidden');
+}
+</script>
+</body>
+</html>
 
