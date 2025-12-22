@@ -826,10 +826,13 @@
 
         // 로그인 건너뛰기
         function skipLogin() {
-            isLoggedIn = false;
-            showMainScreen();
+    isLoggedIn = false;
+    userEmail = '';  // ← 이메일 초기화 추가
+    // UI 초기화
+    document.getElementById('userInfo').style.display = 'none';  // ← 숨김
+    document.getElementById('userEmail').textContent = '';  // ← 텍스트 제거
+    showMainScreen();
         }
-
         // 메인 화면 표시
         function showMainScreen() {
             document.getElementById('loginScreen').style.display = 'none';
