@@ -813,16 +813,7 @@
             }
         };
 
-        // Google 로그인 (시뮬레이션)
-        function handleGoogleLogin() {
-            // 실제로는 Google OAuth를 연동해야 하지만, 시연용으로 시뮬레이션
-            const email = prompt('Google 이메일을 입력하세요 (시연용):');
-            if (email && email.includes('@')) {
-                isLoggedIn = true;
-                userEmail = email;
-                showMainScreen();
-            }
-        }
+    
 
         // 로그인 건너뛰기
         function skipLogin() {
@@ -937,7 +928,7 @@
             document.getElementById('mainScreen').classList.add('active');
         }
     </script>
- <script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
@@ -964,7 +955,7 @@ window.handleGoogleLogin = async function() {
     } catch (error) {
         alert('로그인 실패: ' + error.message);
     }
-};
+}
 </script>
 
     const app = initializeApp(firebaseConfig);
