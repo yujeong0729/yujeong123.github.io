@@ -978,24 +978,7 @@
         }
 
     
-            
-            // 로그인된 경우 결과 전송 옵션 표시
-            if (isLoggedIn) {
-                document.getElementById('sendResultBox').style.display = 'block';
-            }
-        }
-
-        // 결과 전송
-        function sendResult() {
-            alert(`결과가 ${userEmail}로 전송되었습니다! (실제로는 이메일 API 연동 필요)`);
-            document.getElementById('sendResultBox').style.display = 'none';
-        }
-
-        // 전송 박스 닫기
-        function closeSendBox() {
-            document.getElementById('sendResultBox').style.display = 'none';
-        }
-
+        
         // 메인으로 돌아가기
         function backToMain() {
             document.getElementById('testScreen').classList.remove('active');
