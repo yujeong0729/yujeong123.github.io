@@ -840,7 +840,7 @@
         // Google 로그인 (시뮬레이션)
         function handleGoogleLogin() {
             // 실제로는 Google OAuth를 연동해야 하지만, 시연용으로 시뮬레이션
-            const email = prompt('Google 이메일을 입력하세요 (시연용):');
+            const email = prompt('Google 이메일을 입력하세요 (시연용. 결과가 해당 이메일로 발송되지 않음):');
             if (email && email.includes('@')) {
                 isLoggedIn = true;
                 userEmail = email;
