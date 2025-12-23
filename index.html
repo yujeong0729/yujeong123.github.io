@@ -938,20 +938,32 @@
         }
     </script>
  <script type="module">
-   
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    <!-- Firebase App (필수) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
-      authDomain: "psychology-test-login.firebaseapp.com",
-      projectId: "psychology-test-login",
-      storageBucket: "psychology-test-login.firebasestorage.app",
-      messagingSenderId: "683840388122",
-      appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
-    };
+<!-- Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+
+<script>
+  // Firebase 프로젝트 설정
+  const firebaseConfig = {
+    apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
+    authDomain: "psychology-test-login.firebaseapp.com",
+    projectId: "psychology-test-login",
+    storageBucket: "psychology-test-login.firebasestorage.app",
+    messagingSenderId: "683840388122",
+    appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
+  };
+
+  // Firebase 초기화
+  const app = firebase.initializeApp(firebaseConfig);
+
+  // 서비스 초기화
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
 </body>
 </html>
