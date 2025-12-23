@@ -558,6 +558,18 @@
         비밀번호: <input type="password" id="admin-pw"><br>
         <button id="admin-btn">관리자 대시보드 열기</button>
         </div>
+            <script>
+document.getElementById("admin-btn").addEventListener("click", () => {
+    const id = document.getElementById("admin-id").value;
+    const pw = document.getElementById("admin-pw").value;
+    
+    if(id === "yujeongjung" && pw === "123456789"){
+        window.location.href = "./admin.html"; // 현재 폴더에 admin.html 있으면 이동
+    } else {
+        alert("관리자 정보가 일치하지 않습니다.");
+    }
+});
+</script>
     </div>
 
     <!-- 메인 화면 (테스트 선택) -->
