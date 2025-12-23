@@ -816,7 +816,7 @@
         // Google 로그인 (시뮬레이션)
         function handleGoogleLogin() {
             // 실제로는 Google OAuth를 연동해야 하지만, 시연용으로 시뮬레이션
-            const email = prompt('Google 이메일을 입력하세요 (시연용. 결과가 메일로 전송되지 않음):');
+            const email = prompt('Google 이메일을 입력하세요 (시연용):');
             if (email && email.includes('@')) {
                 isLoggedIn = true;
                 userEmail = email;
@@ -938,49 +938,36 @@
         }
     </script>
  <script type="module">
-    <!-- Firebase App (필수) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-<!-- Firebase Authentication -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
+  authDomain: "psychology-test-login.firebaseapp.com",
+  projectId: "psychology-test-login",
+  storageBucket: "psychology-test-login.appspot.com",
+  messagingSenderId: "683840388122",
+  appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
+};
 
-<!-- Firebase Firestore -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-<script>
-  Firebase 프로젝트 설정
-  const firebaseConfig = {
-    apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
-    authDomain: "psychology-test-login.firebaseapp.com",
-    projectId: "psychology-test-login",
-    storageBucket: "psychology-test-login.firebasestorage.app",
-    messagingSenderId: "683840388122",
-    appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
-  };
-
-  <script type="module">
-
-     
-    // 여기에 Firebase 초기화 코드 넣기
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
-
+window.handleGoogleLogin = async function() {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        isLoggedIn = true;
+        userEmail = user.email;
+        showMainScreen();
+    } catch (error) {
+        alert('로그인 실패: ' + error.message);
+    }
+};
+</script>
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-  
-   <script>
-document.getElementById("admin-btn").addEventListener("click", () => {
-    const id = document.getElementById("admin-id").value;
-    const pw = document.getElementById("admin-pw").value;
-    
-    if(id === "yujeongjung" && pw === "123456789"){
-        window.location.href = "admin.html"; // 로그인 성공 시 이동
-    } else {
-        alert("관리자 정보가 일치하지 않습니다.");
-    }
-});
-</script>
-        
 </body>
 </html>
