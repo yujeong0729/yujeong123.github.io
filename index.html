@@ -958,26 +958,23 @@
     appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
   };
 
-  <script type="module">
+    <script type="module">
 
-     
-    // 여기에 Firebase 초기화 코드 넣기
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-
+    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
   
-   <script>
-document.getElementById("admin-btn").addEventListener("click", () => {
-    const id = document.getElementById("admin-id").value;
-    const pw = document.getElementById("admin-pw").value;
-    
-    if(id === "yujeongjung" && pw === "123456789"){
-        window.location.href = "admin.html"; // 로그인 성공 시 이동
-    } else {
-        alert("관리자 정보가 일치하지 않습니다.");
+    document.getElementById("admin-btn").addEventListener("click", () => {
+        const id = document.getElementById("admin-id").value;
+        const pw = document.getElementById("admin-pw").value;
+        
+        if(id === "yujeongjung" && pw === "123456789"){
+            window.location.href = "admin.html"; // 로그인 성공 시 이동
+    }     else {
+            alert("관리자 정보가 일치하지 않습니다.");
     }
 });
 </script>
