@@ -165,61 +165,6 @@
             border-left: 4px solid var(--accent);
         }
 
-        .admin-btn {
-            position: relative;
-            padding: 1.3rem 2.8rem;
-            background: linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%);
-            color: white;
-            border: 3px solid white;
-            border-radius: 35px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            transition: all 0.3s ease;
-            box-shadow: 
-                0 8px 20px rgba(224, 195, 252, 0.4),
-                inset 0 2px 4px rgba(255, 255, 255, 0.4);
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .admin-btn::before {
-            content: '✨';
-            font-size: 1.5rem;
-            z-index: 2;
-        }
-
-        .admin-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
-            animation: shine 3s infinite;
-        }
-
-        .admin-btn:hover {
-            transform: translateY(-5px) rotate(-2deg);
-            box-shadow: 
-                0 15px 30px rgba(224, 195, 252, 0.6),
-                inset 0 2px 4px rgba(255, 255, 255, 0.4);
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
         /* 메인 화면 */
         .main-screen {
             display: none;
@@ -610,30 +555,6 @@
         </div>
     </div>
 
-      <!-- 관리자 대시보드 버튼, 항상 보이게 -->
-    
-<div id="admin-login" style="margin-top: 20px;">
-        <h3>📊 관리자이신가요?</h3>
-        아이디: <input type="text" id="admin-id"><br>
-        비밀번호: <input type="password" id="admin-pw"><br>
-        <button id="admin-btn">관리자 대시보드 열기</button>
-    </div>
-
-    <!-- 이벤트 연결 스크립트 -->
-    <script>
-    document.getElementById("admin-btn").addEventListener("click", () => {
-        const id = document.getElementById("admin-id").value;
-        const pw = document.getElementById("admin-pw").value;
-        
-        if(id === "yujeongjung" && pw === "123456789"){
-            window.location.href = "./admin.html"; // 현재 폴더에 admin.html 있어야 이동
-        } else {
-            alert("관리자 정보가 일치하지 않습니다.");
-        }
-    });
-    </script>
-</body>
-
     <!-- 메인 화면 (테스트 선택) -->
     <div class="main-screen" id="mainScreen">
         <div class="user-info" id="userInfo" style="display: none;">
@@ -895,7 +816,7 @@
         // Google 로그인 (시뮬레이션)
         function handleGoogleLogin() {
             // 실제로는 Google OAuth를 연동해야 하지만, 시연용으로 시뮬레이션
-            const email = prompt('Google 이메일을 입력하세요 (시연용. 결과가 해당 이메일로 발송되지 않음):');
+            const email = prompt('Google 이메일을 입력하세요 (시연용):');
             if (email && email.includes('@')) {
                 isLoggedIn = true;
                 userEmail = email;
@@ -909,6 +830,7 @@
             showMainScreen();
         }
 
+        }
         // 메인 화면 표시
         function showMainScreen() {
             document.getElementById('loginScreen').style.display = 'none';
@@ -977,8 +899,37 @@
             }
         }
 
-    
-        
+        // 결과 표시
+        function showResult() {
+            document.getElementById('testScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.add('active');
+            
+            // 간단한 결과 계산 (답변의 평균)
+            const avgAnswer = answers.reduce((a, b) => a + b, 0) / answers.length;
+            const resultIndex = Math.min(Math.floor(avgAnswer), testData.results.length - 1);
+            const result = testData.results[resultIndex];
+            
+            document.getElementById('resultIcon').textContent = result.icon;
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.desc;
+            
+            // 로그인된 경우 결과 전송 옵션 표시
+            if (isLoggedIn) {
+                document.getElementById('sendResultBox').style.display = 'block';
+            }
+        }
+
+        // 결과 전송
+        function sendResult() {
+            alert(`결과가 ${userEmail}로 전송되었습니다! (실제로는 이메일 API 연동 필요)`);
+            document.getElementById('sendResultBox').style.display = 'none';
+        }
+
+        // 전송 박스 닫기
+        function closeSendBox() {
+            document.getElementById('sendResultBox').style.display = 'none';
+        }
+
         // 메인으로 돌아가기
         function backToMain() {
             document.getElementById('testScreen').classList.remove('active');
@@ -987,28 +938,20 @@
         }
     </script>
  <script type="module">
-
-     
     // 여기에 Firebase 초기화 코드 넣기
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
+      authDomain: "psychology-test-login.firebaseapp.com",
+      projectId: "psychology-test-login",
+      storageBucket: "psychology-test-login.firebasestorage.app",
+      messagingSenderId: "683840388122",
+      appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-  
-   <script>
-document.getElementById("admin-btn").addEventListener("click", () => {
-    const id = document.getElementById("admin-id").value;
-    const pw = document.getElementById("admin-pw").value;
-    
-    if(id === "yujeongjung" && pw === "123456789"){
-        window.location.href = "admin.html"; // 로그인 성공 시 이동
-    } else {
-        alert("관리자 정보가 일치하지 않습니다.");
-    }
-});
-</script>
-        
 </body>
 </html>
