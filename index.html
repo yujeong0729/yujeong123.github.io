@@ -632,6 +632,7 @@
         let answers = [];
         let testData = {};
 
+
         // 테스트 데이터
         const tests = {
             university: {
@@ -928,32 +929,13 @@
             document.getElementById('mainScreen').classList.add('active');
         }
     </script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
-  authDomain: "psychology-test-login.firebaseapp.com",
-  projectId: "psychology-test-login",
-  storageBucket: "psychology-test-login.appspot.com",
-  messagingSenderId: "683840388122",
-  appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-window.handleGoogleLogin = async function() {
-    try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
+<script>
+function handleGoogleLogin() {
+    const email = prompt('Google 이메일을 입력하세요 (시연용):');
+    if (email && email.includes('@')) {
         isLoggedIn = true;
-        userEmail = user.email;
+        userEmail = email;
         showMainScreen();
-    } catch (error) {
-        alert('로그인 실패: ' + error.message);
     }
 }
 </script>
