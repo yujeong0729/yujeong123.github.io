@@ -1014,55 +1014,11 @@
             document.getElementById('resultScreen').classList.remove('active');
             document.getElementById('mainScreen').classList.add('active');
         }
-    
+    </script>
  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-    // Firebase 설정
-    const firebaseConfig = {
-        apiKey: "AIzaSyBQHlygYyf3_b-CuKmceYAf_06hudnAWNk",
-        authDomain: "mindtest-4d4e6.firebaseapp.com",
-        projectId: "mindtest-4d4e6",
-        storageBucket: "mindtest-4d4e6.firebasestorage.app",
-        messagingSenderId: "89530034714",
-        appId: "1:89530034714:web:596c176985bda5e7a7ffa3"
-    };
-
-    // Firebase 초기화
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-
-    // 설문 결과 저장 함수
-    async function saveTestResult(email, testName, result, score) {
-        try {
-            const data = {
-                email: email || "anonymous",
-                testName,
-                result,
-                score,
-                timestamp: serverTimestamp()
-            };
-            await addDoc(collection(db, "testResults"), data);
-            alert("결과가 저장되었습니다!");
-        } catch (err) {
-            console.error("Error saving result:", err);
-        }
-    }
-
-    // 버튼 이벤트 예시
-    document.querySelector('.google-btn').addEventListener('click', () => {
-        const email = "user@example.com";
-        saveTestResult(email, "MBTI Test", "INTJ", 95);
-    });
-
-    document.querySelector('.skip-btn').addEventListener('click', () => {
-        saveTestResult(null, "MBTI Test", "INTJ", 95);
-    });
-
-    
+     
+    // 여기에 Firebase 초기화 코드 넣기
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
@@ -1077,7 +1033,6 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    </script>
   
    <script>
 document.getElementById("admin-btn").addEventListener("click", () => {
