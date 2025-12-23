@@ -321,26 +321,6 @@
     <div class="container">
         <a href="index.html" class="back-link">← 메인으로 돌아가기</a>
 
-        <!-- 메인 콘텐츠 아래쪽 -->
-<div id="admin-login" style="margin-top: 20px;">
-  <h3>📊 관리자이신가요?</h3>
-  아이디: <input type="text" id="admin-id"><br>
-  비밀번호: <input type="password" id="admin-pw"><br>
-  <button id="admin-btn">관리자 대시보드 열기</button>
-</div>
-        <script>
-document.getElementById("admin-btn").addEventListener("click", () => {
-    const id = document.getElementById("admin-id").value;
-    const pw = document.getElementById("admin-pw").value;
-    
-    if(id === "yujeongjung" && pw === "123456789"){
-        window.location.href = "admin.html"; // 로그인 성공 시 이동
-    } else {
-        alert("관리자 정보가 일치하지 않습니다.");
-    }
-});
-</script>
-        
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon">📝</div>
