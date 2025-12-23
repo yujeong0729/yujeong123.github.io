@@ -977,19 +977,7 @@
             }
         }
 
-        // 결과 표시
-        function showResult() {
-            document.getElementById('testScreen').classList.remove('active');
-            document.getElementById('resultScreen').classList.add('active');
-            
-            // 간단한 결과 계산 (답변의 평균)
-            const avgAnswer = answers.reduce((a, b) => a + b, 0) / answers.length;
-            const resultIndex = Math.min(Math.floor(avgAnswer), testData.results.length - 1);
-            const result = testData.results[resultIndex];
-            
-            document.getElementById('resultIcon').textContent = result.icon;
-            document.getElementById('resultTitle').textContent = result.title;
-            document.getElementById('resultDescription').textContent = result.desc;
+    
             
             // 로그인된 경우 결과 전송 옵션 표시
             if (isLoggedIn) {
@@ -1022,14 +1010,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAs9ZKpvEpXhuyFJp1vTXEOAElro-pBO7c",
-      authDomain: "psychology-test-login.firebaseapp.com",
-      projectId: "psychology-test-login",
-      storageBucket: "psychology-test-login.firebasestorage.app",
-      messagingSenderId: "683840388122",
-      appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
-    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
