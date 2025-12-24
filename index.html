@@ -548,12 +548,17 @@
                 </svg>
                 Google 계정으로 시작하기
             </button>
+            
             <button class="skip-btn" onclick="skipLogin()">로그인하지 않고 시작하기</button>
+            <button class="skip-btn" onclick="showAdminLogin()">관리자 로그인</button>  <!-- 여기추가함 -->
             <div class="notice">
                 💡 로그인하지 않으면 테스트 결과를 이메일로 받을 수 없습니다.
             </div>
         </div>
     </div>
+
+     
+    
 
     <!-- 메인 화면 (테스트 선택) -->
     <div class="main-screen" id="mainScreen">
@@ -958,25 +963,43 @@
     appId: "1:683840388122:web:f8f77a3976854834e6a5a3"
   };
 
-    <script type="module">
-
+<script type="module"> //여기 수정함
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
-    
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-  
-    document.getElementById("admin-btn").addEventListener("click", () => {
-        const id = document.getElementById("admin-id").value;
-        const pw = document.getElementById("admin-pw").value;
-        
-        if(id === "yujeongjung" && pw === "123456789"){
-            window.location.href = "admin.html"; // 로그인 성공 시 이동
-    }     else {
-            alert("관리자 정보가 일치하지 않습니다.");
-    }
-});
+
+    // 🔹 관리자 로그인 화면 열기
+    window.showAdminLogin = function () {
+        document.getElementById("loginScreen").classList.add("hidden");
+        document.getElementById("adminLoginScreen").classList.remove("hidden");
+    };
+
+    // 🔹 관리자 로그인 처리
+    window.completeAdminLogin = function () {
+        const id = document.getElementById("adminEmail").value;
+        const pw = document.getElementById("adminPassword").value;
+
+        if (id === "yujeongjung" && pw === "123456789") {
+            document.getElementById("adminLoginScreen").classList.add("hidden");
+            document.getElementById("adminDashboard").classList.remove("hidden");
+        } else {
+            document.getElementById("adminErrorMessage").style.display = "block";
+        }
+    };
+
+    // 🔹 뒤로 가기
+    window.backToLoginScreen = function () {
+        document.getElementById("adminLoginScreen").classList.add("hidden");
+        document.getElementById("loginScreen").classList.remove("hidden");
+    };
+
+    // 🔹 로그아웃
+    window.logoutAdmin = function () {
+        document.getElementById("adminDashboard").classList.add("hidden");
+        document.getElementById("loginScreen").classList.remove("hidden");
+    };
 </script>
         
 </body>
